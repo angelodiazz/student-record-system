@@ -34,4 +34,3 @@ cmake --build .
 ## Notes
 - Student records are saved locally using CSV files.
 - Runtime data is excluded from version control using `.gitignore`.
-- The project demonstrates clean C++ project structure and proper Git workflow.
