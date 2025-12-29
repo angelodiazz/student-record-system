@@ -1,0 +1,17 @@
+# CLion / JetBrains
+.idea/
+
+# CMake build folders
+cmake-build-*/
+
+# Runtime data
+data/*.csv
+
+# Compiled binaries
+*.exe
+*.out
+*.app
+
+# OS junk
+.DS_Store
+Thumbs.db
