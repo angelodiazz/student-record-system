@@ -93,7 +93,6 @@ bool StudentDatabase::load() {
     }
 
     std::string line;
-    // Header expected (optional)
     std::getline(in, line);
 
     while (std::getline(in, line)) {
