@@ -34,6 +34,7 @@ student-record-system/
 ├── CMakeLists.txt
 ├── .gitignore
 └── README.md
+```
 
 ## Build & Run
 This project uses **CMake** and **C++17**.
