@@ -1,44 +1,62 @@
-# Student Record System (C++)
+# Student Record System (C++17)
 
-A C++ application for managing student academic records using validated user input and structured file handling. This project was built to demonstrate clean program organization, defensive input validation, and modular object-oriented design.
+A high-performance command-line interface (CLI) for managing academic profiles. This project features a custom-built persistence layer, robust **CRUD (Create, Read, Update, Delete)** operations, and defensive memory management.
 
-## Features
-- Create and manage **student profiles** with unique identifiers
-- Store, update, and retrieve **student academic records**
-- **Input validation** to prevent duplicate or invalid entries
-- **File-based persistence** to save and load student data
-- Clear **separation of concerns** across data models, logic, and file I/O
+---
 
-## Design Overview
-The program is structured into focused components:
-- **Student data models** represent individual student records
-- **Database logic** handles searching, adding, updating, and deleting students
-- **File I/O utilities** manage persistent storage of records
-- **User input handling** is centralized to ensure valid and consistent data entry
+## 🚀 Key Engineering Features
+* **Persistent CRUD Engine**: Architected a complete lifecycle management system capable of Creating, Reading, Updating, and Deleting records with $O(1)$ lookup time for ID-based retrieval.
+* **Custom Serialization Protocol**: Engineered a manual CSV parser with **quoted-field support** and **escape sequence handling**, ensuring data integrity even when fields contain delimiters (e.g., complex course lists).
+* **Defensive I/O Architecture**: Utilized `std::filesystem` to automatically manage directory structures (`data/`) and `std::numeric_limits` for safe input stream flushing, preventing runtime crashes during invalid user entry.
+* **Optimized Search Logic**: Implemented vector-based traversal for partial matching (e.g., "Search by Last Name") while maintaining pointer safety to avoid dangling references.
 
-This design improves maintainability, accuracy, and extensibility.
+---
 
-## Project Structure
+## 🛡 Security & Defensive Design
+* **Input Sanitization**: Centralized all user interaction within an `Input` header, enforcing strict type checking (`isDigitsOnly`) and range validation before data ever touches the core business logic.
+* **Memory Safety**: Utilized **const-correctness** throughout the `StudentDatabase` API to protect internal state, returning `const Student*` pointers to prevent unauthorized modification of cached data.
+* **Exception Resilience**: Wrapped string conversions (`std::stoi`, `std::stod`) in `try-catch` blocks during file loading to ensure the application recovers gracefully from corrupted external data files.
+
+---
+
+## 🛠 Tech Stack
+| Category | Technologies |
+| :--- | :--- |
+| **Language** | C++17 |
+| **Data Structures** | Vectors, String Streams, Structs |
+| **Systems Programming** | File I/O (`<fstream>`), Filesystem API |
+| **Build System** | CMake |
+| **Development Tools** | CLion / Git / VS Code |
+
+---
+
+## 📂 Project Structure
 ```text
 student-record-system/
 ├── src/
-│   ├── main.cpp
-│   ├── Student.h
-│   ├── Student.cpp
-│   ├── StudentDatabase.h
-│   ├── StudentDatabase.cpp
-│   ├── FileManager.h
-│   ├── FileManager.cpp
-│   ├── Input.h
-│   └── Input.cpp
-├── CMakeLists.txt
-├── .gitignore
-└── README.md
+│   ├── main.cpp              # CLI Controller & Event Loop
+│   ├── Student.h/cpp         # Data Model & Profile Logic
+│   ├── StudentDatabase.h/cpp # Persistence & CRUD Implementation
+│   ├── Input.h               # Input Validation Namespace
+├── data/
+│   └── .gitkeep              # Data persistence folder
+├── CMakeLists.txt            # Build Configuration
+├── .gitignore                # Version Control Optimization
 ```
 
-## Build & Run
-This project uses **CMake** and **C++17**.
+## 🚀 Build & Run
+Ensure you have **CMake 3.20+** and a **C++17** compatible compiler installed.
 
+### 1. Configure and Build
 ```bash
+# Generate build files
 cmake -S . -B build
+
+# Compile the project
 cmake --build build
+```
+
+### 2. Execute the Application
+```bash
+# Run the binary
+./build/student_record_system
