@@ -1,62 +1,100 @@
-# Student Record System (C++17)
+# Student Record System
 
-A high-performance command-line interface (CLI) for managing academic profiles. This project features a custom-built persistence layer, robust **CRUD (Create, Read, Update, Delete)** operations, and defensive memory management.
+A C++17 command-line application for creating, reading, updating, deleting, searching, saving, and loading student records.
 
----
+The project demonstrates structured data management, input validation, Standard Template Library containers, CSV persistence, and filesystem operations.
 
-## 🚀 Key Engineering Features
-* **Persistent CRUD Engine**: Architected a complete lifecycle management system capable of Creating, Reading, Updating, and Deleting records with $O(1)$ lookup time for ID-based retrieval.
-* **Custom Serialization Protocol**: Engineered a manual CSV parser with **quoted-field support** and **escape sequence handling**, ensuring data integrity even when fields contain delimiters (e.g., complex course lists).
-* **Defensive I/O Architecture**: Utilized `std::filesystem` to automatically manage directory structures (`data/`) and `std::numeric_limits` for safe input stream flushing, preventing runtime crashes during invalid user entry.
-* **Optimized Search Logic**: Implemented vector-based traversal for partial matching (e.g., "Search by Last Name") while maintaining pointer safety to avoid dangling references.
+## Features
 
----
+- Add student records
+- Update records by student ID
+- Delete records by student ID
+- Find a student by ID
+- Search students by exact last name
+- List all stored students
+- Save records to CSV
+- Load records from CSV
+- Automatically create the storage directory
+- Validate student IDs, academic year, GPA, and course counts during interactive entry
 
-## 🛡 Security & Defensive Design
-* **Input Sanitization**: Centralized all user interaction within an `Input` header, enforcing strict type checking (`isDigitsOnly`) and range validation before data ever touches the core business logic.
-* **Memory Safety**: Utilized **const-correctness** throughout the `StudentDatabase` API to protect internal state, returning `const Student*` pointers to prevent unauthorized modification of cached data.
-* **Exception Resilience**: Wrapped string conversions (`std::stoi`, `std::stod`) in `try-catch` blocks during file loading to ensure the application recovers gracefully from corrupted external data files.
+## Student Data
 
----
+Each student record stores:
 
-## 🛠 Tech Stack
-| Category | Technologies |
-| :--- | :--- |
-| **Language** | C++17 |
-| **Data Structures** | Vectors, String Streams, Structs |
-| **Systems Programming** | File I/O (`<fstream>`), Filesystem API |
-| **Build System** | CMake |
-| **Development Tools** | CLion / Git / VS Code |
+- Student ID
+- First name
+- Last name
+- Major
+- Academic year
+- GPA
+- Course list
 
----
+## Search Implementation
 
-## 📂 Project Structure
+Student records are stored in a `std::vector`.
+
+ID and last-name searches use linear traversal, giving them O(n) time complexity in the number of stored students.
+
+This implementation is appropriate for a small educational application. A future version could add an `std::unordered_map` index for average O(1) ID lookup.
+
+## CSV Persistence
+
+The application stores records in:
+
+```text
+data/students.csv
+```
+
+String fields are written as quoted CSV fields. Embedded double quotes are escaped by doubling them.
+
+Course names are stored in one quoted field and separated internally with the `|` character.
+
+Rows with missing fields or invalid numeric values are skipped while loading.
+
+## Technologies
+
+- C++17
+- Standard Template Library
+- `std::vector`
+- `std::filesystem`
+- File streams
+- String streams
+- CMake
+
+## Project Structure
+
 ```text
 student-record-system/
 ├── src/
-│   ├── main.cpp              # CLI Controller & Event Loop
-│   ├── Student.h/cpp         # Data Model & Profile Logic
-│   ├── StudentDatabase.h/cpp # Persistence & CRUD Implementation
-│   ├── Input.h               # Input Validation Namespace
+│   ├── main.cpp
+│   ├── Student.h
+│   ├── Student.cpp
+│   ├── StudentDataBase.h
+│   ├── StudentDataBase.cpp
+│   └── Input.h
 ├── data/
-│   └── .gitkeep              # Data persistence folder
-├── CMakeLists.txt            # Build Configuration
-├── .gitignore                # Version Control Optimization
+│   └── .gitkeep
+├── CMakeLists.txt
+├── .gitignore
+└── README.md
 ```
 
-## 🚀 Build & Run
-Ensure you have **CMake 3.20+** and a **C++17** compatible compiler installed.
+## Build
 
-### 1. Configure and Build
+Requirements:
+
+- CMake 3.20 or newer
+- A C++17-compatible compiler
+
 ```bash
-# Generate build files
 cmake -S . -B build
-
-# Compile the project
 cmake --build build
 ```
 
-### 2. Execute the Application
+## Run
+
+Run the executable from the repository root so the relative `data/` path is created in the expected location.
+
 ```bash
-# Run the binary
 ./build/student_record_system
+```
